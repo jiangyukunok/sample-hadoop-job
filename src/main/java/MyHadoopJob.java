@@ -69,6 +69,7 @@ public class MyHadoopJob {
     // First job
     JobConf conf = new JobConf(MyHadoopJob.class);
     conf.setJobName("anagram");
+    conf.set("mapreduce.job.split.metainfo.maxsize", "-1");
 
     conf.setOutputKeyClass(Text.class);
     conf.setOutputValueClass(Text.class);
@@ -80,8 +81,8 @@ public class MyHadoopJob {
     conf.setInputFormat(TextInputFormat.class);
     conf.setOutputFormat(TextOutputFormat.class);
 
-    String outputPath = "file:///Users/kejiang/Developer/MyHDFS/hadoop/tmp-" + System.currentTimeMillis() + "/";
-    FileInputFormat.setInputPaths(conf, new Path("file:///Users/kejiang/Developer/maildir/allen-p/_sent_mail/*"));
+    String outputPath = "/test/tmp-" + System.currentTimeMillis() + "/";
+    FileInputFormat.setInputPaths(conf, new Path(args[0]));
     FileOutputFormat.setOutputPath(conf, new Path(outputPath));
 
     JobClient.runJob(conf);
@@ -100,23 +101,23 @@ public class MyHadoopJob {
     conf2.setInputFormat(TextInputFormat.class);
     conf2.setOutputFormat(TextOutputFormat.class);
 
-    String outputPath2 = "file:///Users/kejiang/Developer/MyHDFS/hadoop/anagram-" + System.currentTimeMillis() + "/";
+    String outputPath2 = "gs://bessie_cloud_bucket-1/hadoop/anagram-" + System.currentTimeMillis() + "/";
     FileInputFormat.setInputPaths(conf2, new Path(outputPath)); // First job's output is second job's input
     FileOutputFormat.setOutputPath(conf2, new Path(outputPath2));
 
     JobClient.runJob(conf2);
   }
 
+
   /**
    * Find all palindromes
    */
 //  public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
 //    private final static IntWritable one = new IntWritable(1);
-//    private Text word = new Text();
 //
 //    public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter)
 //        throws IOException {
-//      String[] words = value.toString().toLowerCase().replaceAll("[^a-zA-Z0-9\\s]+", "").split("\\s+");
+//      String[] words = value.toString().toLowerCase().replaceAll("[^a-zA-Z\\s]+", "").split("\\s+");
 //      for (String word: words) {
 //        if (isPalindrome(word)) {
 //          output.collect(new Text(word), one);
@@ -152,6 +153,7 @@ public class MyHadoopJob {
 //  public static void main(String[] args) throws Exception {
 //    JobConf conf = new JobConf(MyHadoopJob.class);
 //    conf.setJobName("palindrome");
+//    conf.set("mapreduce.job.split.metainfo.maxsize", "-1");
 //
 //    conf.setOutputKeyClass(Text.class);
 //    conf.setOutputValueClass(IntWritable.class);
@@ -163,9 +165,9 @@ public class MyHadoopJob {
 //    conf.setInputFormat(TextInputFormat.class);
 //    conf.setOutputFormat(TextOutputFormat.class);
 //
-//    FileInputFormat.setInputPaths(conf, new Path("file:///Users/kejiang/Developer/MyHDFS/rose.txt"));
-//    FileOutputFormat.setOutputPath(conf,
-//        new Path("file:///Users/kejiang/Developer/MyHDFS/hadoop/palindrome-" + System.currentTimeMillis() + "/"));
+//    String outputPath = "gs://bessie_cloud_bucket-1/hadoop/palindrome-" + System.currentTimeMillis() + "/";
+//    FileInputFormat.setInputPaths(conf, new Path(args[0]));
+//    FileOutputFormat.setOutputPath(conf, new Path(outputPath));
 //
 //    JobClient.runJob(conf);
 //  }
