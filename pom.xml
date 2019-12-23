@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>bessiejiang</groupId>
-  <artifactId>hadoop-anagram</artifactId>
+  <artifactId>hadoop-palindrome</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
 
